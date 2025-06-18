@@ -11,8 +11,7 @@ TEMPLATE = """
 <center>
 <h1>Towers of Hanoi</h1>
   <p style="max-width: 600px; margin: auto; text-align: left;">
-    The Towers of Hanoi is a classic puzzle invented by French mathematician Édouard Lucas in 1883. It consists of three rods and a number of disks of different sizes. The goal is to move all the disks from the first rod to the third, always making sure that smaller disks stay on top of the bigger ones.
-    <br>This puzzle is often used to teach recursion. The recursive solution breaks the problem down into smaller sub-problems, solving them step by step with elegant logic.<br><br>
+    The Towers of Hanoi is a classic puzzle invented by French mathematician Édouard Lucas in 1883. It consists of three rods and n disks of different sizes. The goal is to move all the disks from the first rod to the third, always making sure that smaller disks stay on top of the bigger ones.
     The minimum number of moves required to solve the puzzle with <strong>n</strong> disks is 2<sup>n</sup> − 1.
   </p>
 <br>
@@ -31,7 +30,7 @@ TEMPLATE = """
 
   <input type="hidden" name="disks" value="{{ disks }}">
 
-  <!-- top row container: inline-flex to group buttons and heading centered -->
+  <!-- group buttons and heading -->
   <div style="display: inline-flex; align-items: center; justify-content: center; gap: 10px;">
     <button type="submit" name="prev" value="{{ move_index - 1 }}" {% if move_index == 0 %}disabled{% endif %}>
       &lt;
@@ -44,7 +43,7 @@ TEMPLATE = """
     </button>
   </div>
 
-  <!-- slider container: centered below -->
+  <!-- slider -->
   <div style="width: 100%; display: flex; justify-content: center;">
     <input type="range" name="index" min="0" max="{{ total_moves - 1 }}" value="{{ move_index }}"
        oninput="this.nextElementSibling.value = parseInt(this.value) + 1" onchange="this.form.submit()">
@@ -53,7 +52,10 @@ TEMPLATE = """
 </form>
 
 {% endif %}
+  <p style="max-width: 600px; margin: auto; text-align: left;">
 
+<br>This puzzle is often used to teach recursion. The recursive solution breaks the problem down into smaller sub-problems, solving them step by step with elegant logic.<br><br>
+</p>
 <div style="max-width: 600px; margin: auto;">
   <pre style="background-color: #f4f4f4; padding: 1rem; border-radius: 5px; overflow-x: auto; text-align: left;">
 <code style="font-family: monospace;">
