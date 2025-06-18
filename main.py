@@ -36,16 +36,16 @@ TEMPLATE = """
       &lt;
     </button>
 
-    <h2 style="margin: 0;">Step {{ move_index + 1 }} / {{ total_moves }}</h2>
+    <h2 style="margin: 0;">Step {{ move_index }} / {{ total_moves }}</h2>
 
-    <button type="submit" name="next" value="{{ move_index + 1 }}" {% if move_index + 1 >= total_moves %}disabled{% endif %}>
+    <button type="submit" name="next" value="{{ move_index + 1 }}" {% if move_index >= total_moves %}disabled{% endif %}>
       &gt;
     </button>
   </div>
 
   <!-- slider -->
   <div style="width: 100%; display: flex; justify-content: center;">
-    <input type="range" name="index" min="0" max="{{ total_moves - 1 }}" value="{{ move_index }}"
+    <input type="range" name="index" min="0" max="{{ total_moves }}" value="{{ move_index }}"
        oninput="this.nextElementSibling.value = parseInt(this.value) + 1" onchange="this.form.submit()">
   </div>
 
@@ -122,7 +122,7 @@ def render_svg(rods, max_disks):
 def index():
     message = ""
     move_index = int(request.args.get('index', 0))
-    disks = 3
+    disks = 5
 
     if request.method == 'POST':
         try:
@@ -135,7 +135,7 @@ def index():
         try:
             disks = int(request.args.get('disks', 3))
         except:
-            disks = 3
+            disks = 5
 
     if 'prev' in request.args:
         move_index = max(0, move_index - 1)
@@ -155,6 +155,7 @@ def index():
                                   disks=disks,
                                   message=message)
 
+# uncomment for local testing
 #if __name__ == '__main__':
 #    app.run(debug=True)
 
