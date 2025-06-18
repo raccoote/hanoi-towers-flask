@@ -1,5 +1,5 @@
 # hanoi-towers-flask
-You can try the simulation [here](https://hanoi-towers-flask.onrender.com). (Please note it might take a little time to start up sometimes since it’s hosted on a free service.)
+You can try the simulation [here](https://hanoi-towers-flask.onrender.com). (Please note it might take time to start up since it’s hosted on a free service.)
 
 This is an educational Tower of Hanoi visualization built with Flask and Python. It uses SVGs to show the rods, base and disks.
 
