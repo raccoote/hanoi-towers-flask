@@ -1,38 +1,77 @@
 from flask import Flask, request, render_template_string
 import copy
+import os
 
 app = Flask(__name__)
 
 TEMPLATE = """
 <!doctype html>
-<title>Towers of Hanoi - SVG</title>
+<title>Towers of Hanoi</title>
+
 <center>
 <h1>Towers of Hanoi</h1>
-<form method="post" action="/">
+  <p style="max-width: 600px; margin: auto; text-align: left;">
+    The Towers of Hanoi is a classic puzzle invented by French mathematician Édouard Lucas in 1883. It consists of three rods and a number of disks of different sizes. The goal is to move all the disks from the first rod to the third, always making sure that smaller disks stay on top of the bigger ones.
+    <br>This puzzle is often used to teach recursion. The recursive solution breaks the problem down into smaller sub-problems, solving them step by step with elegant logic.<br><br>
+    The minimum number of moves required to solve the puzzle with <strong>n</strong> disks is 2<sup>n</sup> − 1.
+  </p>
+<br>
+
+  <form method="get" 
+        style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
   <label>Number of disks (1–15):</label>
   <input type="number" name="disks" min="1" max="15" value="{{ disks }}">
   <input type="submit" value="Solve">
 </form>
 
 {% if total_moves %}
-  <h2>Step {{ move_index + 1 }} / {{ total_moves }}</h2>
   {{ current_frame|safe }}
 
-  <form method="get" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-    <input type="hidden" name="disks" value="{{ disks }}">
+  <form method="get" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
 
+  <input type="hidden" name="disks" value="{{ disks }}">
+
+  <!-- top row container: inline-flex to group buttons and heading centered -->
+  <div style="display: inline-flex; align-items: center; justify-content: center; gap: 10px;">
     <button type="submit" name="prev" value="{{ move_index - 1 }}" {% if move_index == 0 %}disabled{% endif %}>
-      <
+      &lt;
     </button>
 
-    <input type="range" name="index" min="0" max="{{ total_moves - 1 }}" value="{{ move_index }}"
-           oninput="this.nextElementSibling.value = parseInt(this.value) + 1" onchange="this.form.submit()">
+    <h2 style="margin: 0;">Step {{ move_index + 1 }} / {{ total_moves }}</h2>
 
     <button type="submit" name="next" value="{{ move_index + 1 }}" {% if move_index + 1 >= total_moves %}disabled{% endif %}>
-      >
+      &gt;
     </button>
-  </form>
+  </div>
+
+  <!-- slider container: centered below -->
+  <div style="width: 100%; display: flex; justify-content: center;">
+    <input type="range" name="index" min="0" max="{{ total_moves - 1 }}" value="{{ move_index }}"
+       oninput="this.nextElementSibling.value = parseInt(this.value) + 1" onchange="this.form.submit()">
+  </div>
+
+</form>
+
 {% endif %}
+
+<div style="max-width: 600px; margin: auto;">
+  <pre style="background-color: #f4f4f4; padding: 1rem; border-radius: 5px; overflow-x: auto; text-align: left;">
+<code style="font-family: monospace;">
+###  Python Recursive Solution  ###
+def hanoi(n, source, target, auxiliary):
+    if n == 1:
+        print(f"Move disk 1 from {source} to {target}")
+    else:
+        hanoi(n - 1, source, auxiliary, target)
+        print(f"Move disk {n} from {source} to {target}")
+        hanoi(n - 1, auxiliary, target, source)
+
+# Example usage
+hanoi(3, "A", "C", "B")
+  </code></pre>
+  <p style="font-size: 0.9em; margin-top: 20px;">
+  &copy; 2025 Dimitra Pazouli · <a href="https://github.com/raccoote/hanoi-towers-flask/tree/main" target="_blank">Source Code on GitHub</a>
+</p>
 </center>
 """
 
@@ -54,7 +93,7 @@ def render_state(disks, moves, step):
 
 def render_svg(rods, max_disks):
     width = 600
-    height = 400
+    height = 250
     peg_x = [150, 300, 450]
     peg_y = 200
     disk_height = 12
@@ -114,5 +153,9 @@ def index():
                                   disks=disks,
                                   message=message)
 
+#if __name__ == '__main__':
+#    app.run(debug=True)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
